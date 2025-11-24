@@ -6,7 +6,6 @@ using namespace std;
 
 class items {
 	public:
-		//items(char*, char*, char*);
 		items(char*, char*, char* = "\033[0m");
 		~items();
 		char* getName();

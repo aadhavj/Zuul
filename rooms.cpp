@@ -11,6 +11,8 @@ rooms::rooms(char* inputName, char* inputDescription){
 	description = new char[1000];
 	strcpy(description, inputDescription);
 	vector<items*> roomInventory;
+	vector<rooms*> exits;
+        vector<char*> exitDirections;	
 }
 
 rooms::~rooms(){
@@ -33,9 +35,43 @@ void rooms::setDescription(char* inputDescription){
 void rooms::addItems(items* inputItem){
 	roomInventory.push_back(inputItem);
 }
-void rooms::removeItems(int removalIndex){
-	delete[] roomInventory[removalIndex];
+items* rooms::removeItems(int removalIndex){
+	items* a = roomInventory[removalIndex];
 	roomInventory.erase(roomInventory.begin()+removalIndex);
+	return a;
+}
+vector<items*> rooms::seeItems(){
+	return roomInventory;
+}
+void rooms::addExit(rooms* inputRoom, char* direction){
+	exits.push_back(inputRoom);
+	exitDirections.push_back(direction);
+}
+void rooms::seeExits(){
+	cout << "\nExits: " << endl;
+	for (int i = 0;i < exits.size();i++){
+		cout << exitDirections[i] << "\t" << exits[i]->getName() << endl;
+	}
+}
+bool rooms::validItemIndex(int itemIndex){
+	return (!roomInventory.empty() && itemIndex < roomInventory.size());
+}
+bool rooms::validDirection(char* direction){
+	for (int i = 0;i < exitDirections.size();i++){
+		if (strcmp(direction, exitDirections[i]) == 0){
+			return true;
+		}
+	}
+	return false;
+}
+//Must be run with valid direction to work, run validDirection prior to this
+rooms* rooms::enterRoom(char* direction){
+	for (int i = 0; i < exits.size();i++){
+		if (strcmp(direction, exitDirections[i]) == 0){
+			return exits[i];
+		}
+	}
+	return exits[0];
 }
 void rooms::print(){
 	cout << "\nName: " << name << "\nDescription: " << description << endl;

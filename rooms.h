@@ -16,10 +16,18 @@ class rooms {
 		void setDescription(char*);
 		void print();
 		void addItems(items*);
-		void removeItems(int);
+		vector<items*> seeItems();
+		items* removeItems(int);
+		void addExit(rooms*, char*);
+		void seeExits();
+		rooms* enterRoom(char*);
+		bool validDirection(char*);
+		bool validItemIndex(int);
 	private:
 		char* name;
 		char* description;
+		vector<rooms*> exits;
 		vector<items*> roomInventory;
+		vector<char*> exitDirections;
 };
 #endif
