@@ -1,12 +1,17 @@
+//Header guard
 #ifndef ROOMS_H
 #define ROOMS_H
+
+//Regular imports
 #include <iostream>
 #include <cstring>
 #include <vector>
 #include "items.h"
 using namespace std;
 
+//Class instantiation
 class rooms {
+	//Publicly accessible constructor, destructor, getters, setters, and useful functions
 	public:
 		rooms(char*,char*);
 		~rooms();
@@ -23,6 +28,7 @@ class rooms {
 		rooms* enterRoom(char*);
 		bool validDirection(char*);
 		bool validItemIndex(int);
+	//Privately accessible variables/characteristics and exits, directions, and roomInventory vectors
 	private:
 		char* name;
 		char* description;
@@ -30,4 +36,5 @@ class rooms {
 		vector<items*> roomInventory;
 		vector<char*> exitDirections;
 };
+//End of header guard
 #endif

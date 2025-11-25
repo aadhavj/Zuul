@@ -36,6 +36,8 @@ int main(){
 	int itemIndex;
 	vector<items*> inventory;
 	bool hasMap;
+
+	//Randomizer neccessities
 	srand(static_cast<unsigned int>(std::time(nullptr)));
 	int random_num;
 	int minRandom = 0;
@@ -112,7 +114,8 @@ int main(){
 
 	rooms* GirlsBathroom =  new rooms("Girl's Bathroom", "A few sinks, a few stalls, nothin much.");
 	university.push_back(GirlsBathroom);
-
+	
+	//Randomizer max set based on room numbers
 	int maxRandom = university.size()-1;
 
 	//Adding exits
@@ -183,10 +186,7 @@ int main(){
 	Dormitory4->addExit(GirlsBathroom, "North");
 	Dormitory4->addExit(HouseDistrict2, "West");
 
-
-
-
-	//ADDING KEYS
+	//ADDING KEYS in random locations, using previous randomizer stuff
 	vector<items*> keys;
 	items* key1 = new items("Key1", "A light bronze key!", RED);
 	keys.push_back(key1);
@@ -205,17 +205,22 @@ int main(){
 
 
 	//BEGIN USER-INTERFACE
-	currentRoom = mainEntrance;
+	currentRoom = mainEntrance; //sets current room/starter room
 	cout << "Hello! Welcome to " << RED << "escape the unversity" << RESET << "\nYour goal is to escape, but you gotta figure out how!\nStart exploring!" << endl;
 	while (runProgram){
-
+		
+		//Gives room information, name and details of room, as well as items and avaliable exits
 		currentRoom->print();
 		currentRoom->seeExits();
-
+		
+		//Tip on how to get info on commands
 		cout << "\nNeed a detailed command description? type " << GREEN << "HELP" << RESET << "." << "\nCOMMAND: ";
+		
+		//Command getter
 		cin >> command;
-
-		if (strcmp(command, seeMap) == 0){
+		
+		//Command parser
+		if (strcmp(command, seeMap) == 0){ //Checks to see if player has map object, if so, displays rudimentary map
 			hasMap = false;
 			for (int i = 0; i < inventory.size();i++){
 				if (strcmp(inventory[i]->getName(),map->getName()) == 0){
@@ -229,7 +234,7 @@ int main(){
 			cout << MAGENTA << "You do not currently have access to the map. You must pick one up." << RESET << endl;
 			}
 		}
-		else if (strcmp(command,help) == 0){
+		else if (strcmp(command,help) == 0){ //Lists all possible user commands and brief description on each
 			cout << CYAN << "\nPossible Commands: MAP, PICKUP, DROP, INVENTORY, MOVE, HELP, QUIT." << endl;
 			cout << CYAN << "MAP - shows you a detailed map design of the university."  << endl;
 			cout << CYAN << "PICKUP - allows you to pickup items within a room, if possible." << endl;
@@ -239,11 +244,11 @@ int main(){
 			cout << CYAN << "HELP - gives you a detailed list of commands and their purpose." << endl;
 			cout << CYAN << "QUIT - terminated program processes" << RESET << endl;
 		}
-		else if (strcmp(command, quit) == 0){
+		else if (strcmp(command, quit) == 0){ //Terminates program early
 			runProgram = false;
 			cout << RED << "TERMINATING PROGRAM." << RESET << endl;
 		}
-		else if (strcmp(command,seeInventory) == 0){
+		else if (strcmp(command,seeInventory) == 0){ //Displays player inventory, simple as that
 			cout << "_____INVENTORY_____" << endl;
 			if (inventory.size() == 0){
 				cout << "Your pockets are empty" << endl;
@@ -255,7 +260,7 @@ int main(){
 			}
 			cout << "_____INVENTORY_____" << endl;
 		}
-		else if (strcmp(command, pickUp) == 0){
+		else if (strcmp(command, pickUp) == 0){ //Adds items to user inventory
 			if (currentRoom->seeItems().empty()){
 				cout << "No items are present in this room." << endl;
 			}
@@ -266,7 +271,7 @@ int main(){
 					inventory.push_back(currentRoom->removeItems(itemIndex));
 					cout << YELLOW << inventory[inventory.size()-1]->getName() << RESET << " added to inventory." << endl;
 
-					//Check if all keys picked up
+					//Check if all keys picked up, updates hasAllKeys variable, neccessary for win condition
 					hasAllKeys = true;
 					for (int i = 0; i < keys.size();i++){
 						keyHere = false;
@@ -286,7 +291,7 @@ int main(){
 				}
 			}
 		}
-		else if (strcmp(command, drop) == 0){
+		else if (strcmp(command, drop) == 0){ //Allows player to drop items in rooms
 			if (inventory.empty()){
 				cout << "You have nothing to drop.." << endl;
 			}
@@ -301,7 +306,7 @@ int main(){
 					currentRoom->addItems(inventory[itemIndex]);
 					inventory.erase(inventory.begin()+itemIndex);
 					
-					//Confirms whether player has all keys
+					//Confirms whether player has all keys, updates hasAllKeys variabl, neccessary for win condition
 					hasAllKeys = true;
                                         for (int i = 0; i < keys.size();i++){
                                                 keyHere = false;
@@ -320,7 +325,7 @@ int main(){
 				}
 			}
 		}
-		else if (strcmp(command, move) == 0){
+		else if (strcmp(command, move) == 0){ //Prompts player for valid diretion and changes their room
 			cout << "Enter Chosen Direction: ";
 			cin >> direction;
 			if (currentRoom->validDirection(direction)){
@@ -333,18 +338,20 @@ int main(){
 		else{
 			cout << RED << "Invalid command, not recognized. Please try again!" << RESET << endl;
 		}
-
+		
+		//Checks if win conditions e.g. in right room and have keys, to win
 		if ((strcmp(currentRoom->getName(),exitGateway->getName()) == 0) && hasAllKeys){
 			winCondition = true;
 			runProgram = false;
 		}
 
 	}
+	//If player satisfies win conditions, display success text
 	if (winCondition){
 		cout << CYAN << "As you enter the exit gateway, you find the urge\n to slide the four keys you have gathered over\nthe course of this entire journey. After sliding\nthem in, a bright light engulfs you. When you open\nyou eyes, you see you have escaped the university.\n" << RESET << endl;
 		cout << YELLOW << "CONGRATULATIONS!!! YOU HAVE WON!!!!" << RESET << endl;
 	}
-//REMEMBER TO DELETE ALL UNNECCESSARRY STUFF IN MEMORY
+	//ASK GALBRAITH HOW TO PREVENT MEMORY LEAK FROM BEFORE
 	
 
 return 0;
