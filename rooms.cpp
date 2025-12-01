@@ -18,6 +18,12 @@ rooms::rooms(char* inputName, char* inputDescription){
 
 //Rooms destructor
 rooms::~rooms(){
+	for (items* object : roomInventory){
+		delete object;
+	}
+	for (char* direction : exitDirections){
+		delete direction;
+	}
 	delete[] name;
 	delete[] description;
 }

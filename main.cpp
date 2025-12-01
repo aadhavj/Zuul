@@ -206,7 +206,7 @@ int main(){
 
 	//BEGIN USER-INTERFACE
 	currentRoom = mainEntrance; //sets current room/starter room
-	cout << "Hello! Welcome to " << RED << "escape the unversity" << RESET << "\nYour goal is to escape, but you gotta figure out how!\nStart exploring!" << endl;
+	cout << "Hello! Welcome to " << RED << "escape the unversity" << RESET << "\nYour goal is to escape by collecting 4 keys into your inventory and then going to the exit gateway!\nPlease type HELP to find usable commands.\nPS: When picking up items, use the INDEX, not the name.\nStart exploring!" << endl;
 	while (runProgram){
 		
 		//Gives room information, name and details of room, as well as items and avaliable exits
@@ -351,8 +351,13 @@ int main(){
 		cout << CYAN << "As you enter the exit gateway, you find the urge\n to slide the four keys you have gathered over\nthe course of this entire journey. After sliding\nthem in, a bright light engulfs you. When you open\nyou eyes, you see you have escaped the university.\n" << RESET << endl;
 		cout << YELLOW << "CONGRATULATIONS!!! YOU HAVE WON!!!!" << RESET << endl;
 	}
-	//ASK GALBRAITH HOW TO PREVENT MEMORY LEAK FROM BEFORE
-	
+	//Memory Leak Prevention
+	for (rooms* room : university){
+		delete room;
+	}
+	for (items* object : inventory){
+		delete object;
+	}
 
 return 0;
 }
